@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedRecipe } from '../reducers/recipeSlice';
 import RecipeDetail from '../components/RecipeDetails';
+import axios from 'axios';
 
 function RecipeList() {
   const dispatch = useDispatch();
@@ -16,17 +17,16 @@ function RecipeList() {
 
     // Fetch the full recipe details from your server, which will in turn make a Spoonacular API call
     try {
-      const response = await fetch(`/api/recipe-details/${recipe.id}`);
-      if (response.ok) {
-        const data = await response.json();
-        // Update the selectedRecipe with the full details
-        dispatch(setSelectedRecipe({ ...recipe, details: data }));
-        setShowRecipeDetails(true); // Show the recipe details
-      }
+      const response = await axios.get(`http://localhost:8000/api/recipe-details/${recipe.id}`);
+
+      // Update the selectedRecipe with the full details
+      dispatch(setSelectedRecipe({ ...recipe, details: response.data }));
+      setShowRecipeDetails(true); // Show the recipe details
     } catch (error) {
       console.error('Error fetching recipe details:', error);
     }
   };
+  console.log(selectedRecipe);
 
   return (
     <div>
