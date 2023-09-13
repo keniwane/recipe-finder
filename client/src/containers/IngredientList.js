@@ -9,9 +9,10 @@ function IngredientList() {
 
   const handleFindRecipes = async () => {
     const ingredientIds = ingredientList.map((ing) => ing.id).join(',');
+    const ingredientNames = ingredientList.map((ing) => ing.name).join(',');
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/find-recipes-by-ingredients?ingredients=${ingredientIds}`
+        `http://localhost:8000/api/find-recipes-by-ingredients?ingredientIds=${ingredientIds}&ingredientNames=${ingredientNames}`
       );
 
       // Dispatch an action to store the found recipes in Redux
