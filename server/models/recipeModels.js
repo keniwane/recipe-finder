@@ -77,6 +77,12 @@ const stepSchema = new mongoose.Schema({
   },
 });
 
+const recipeDetailSchema = new mongoose.Schema({
+  steps: [stepSchema],
+});
+
+const RecipeDetail = mongoose.model('RecipeDetail', recipeDetailSchema);
+
 const recipeSchema = new Schema({
   id: Number,
   title: String,
@@ -89,7 +95,6 @@ const recipeSchema = new Schema({
   unusedIngredients: [unusedIngredientSchema],
   usedIngredientCount: Number,
   usedIngredients: [usedIngredientSchema],
-  steps: [stepSchema],
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
@@ -99,4 +104,5 @@ module.exports = {
   MissedIngredient,
   UsedIngredient,
   UnusedIngredient,
+  RecipeDetail,
 };
