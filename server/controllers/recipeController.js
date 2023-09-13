@@ -33,10 +33,10 @@ exports.searchIngredients = async (req, res, next) => {
 
 exports.findRecipesByIngredients = async (req, res, next) => {
   try {
-    const ingredients = req.query.ingredients;
-
+    const Id = req.query.ingredientIds;
+    const ingredientNames = req.query.ingredientNames;
     // First, check if recipes for these ingredients are already in the database
-    const ingredientIds = ingredients.split(',').map((id) => parseInt(id));
+    const ingredientIds = Id.split(',').map((id) => parseInt(id));
     const existingRecipes = await Recipe.find({
       'usedIngredients.id': { $in: ingredientIds },
     });
@@ -47,14 +47,14 @@ exports.findRecipesByIngredients = async (req, res, next) => {
 
     // If not in the database, fetch from Spoonacular API
     const response = await axios.get(
-      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients}&apiKey=${process.env.API_KEY}`
+      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientNames}&apiKey=${process.env.API_KEY}`
     );
     console.log('Number of recipes from API:', response.data.length);
 
     // Store the result in the database
     const newRecipes = response.data.map((recipeData) => new Recipe(recipeData));
     const insertedRecipes = await Recipe.insertMany(newRecipes);
-    console.log('Inserted recipes:', insertedRecipes);
+    // console.log('Inserted recipes:', insertedRecipes);
 
     res.json(response.data);
   } catch (error) {
@@ -68,11 +68,11 @@ exports.getRecipeDetails = async (req, res, next) => {
     const recipeId = req.params.id;
 
     // Check if recipe details are already in the database
-    const existingRecipe = await Recipe.findOne({ id: recipeId });
-
-    if (existingRecipe) {
-      return res.json(existingRecipe);
-    }
+    // const existingRecipe = await Recipe.findOne({ id: recipeId });
+    // console.log(existingRecipe);
+    // if (existingRecipe) {
+    //   return res.json(existingRecipe);
+    // }
 
     // If not in the database, fetch from Spoonacular API
     const response = await axios.get(
@@ -80,8 +80,9 @@ exports.getRecipeDetails = async (req, res, next) => {
     );
 
     // Store the result in the database
-    const newRecipe = new Recipe(response.data);
-    await newRecipe.save();
+    // const newRecipe = new Recipe(response.data);
+    // await newRecipe.save();
+    // console.log(newRecipe);
 
     res.json(response.data);
   } catch (error) {
