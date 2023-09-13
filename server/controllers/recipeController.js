@@ -76,7 +76,7 @@ exports.getRecipeDetails = async (req, res, next) => {
 
     // If not in the database, fetch from Spoonacular API
     const response = await axios.get(
-      `https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=false&apiKey=${process.env.API_KEY}`
+      `https://api.spoonacular.com/recipes/${recipeId}/analyzedInstructions?stepBreakdown=true&apiKey=${process.env.API_KEY}`
     );
 
     // Store the result in the database
