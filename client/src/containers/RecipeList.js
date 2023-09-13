@@ -1,30 +1,78 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+// RecipeList.js
+
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedRecipe } from '../reducers/recipeSlice';
+import RecipeDetail from '../components/RecipeDetails';
 
 function RecipeList() {
-  const recipes = useSelector((state) => state.recipes);
+  const dispatch = useDispatch();
+  const recipes = useSelector((state) => state.recipes.recipes);
+  const selectedRecipe = useSelector((state) => state.recipes.selectedRecipe);
+  const [showRecipeDetails, setShowRecipeDetails] = useState(false); // State to control recipe details visibility
+
+  const handleRecipeClick = async (recipe) => {
+    dispatch(setSelectedRecipe(recipe));
+
+    // Fetch the full recipe details from your server, which will in turn make a Spoonacular API call
+    try {
+      const response = await fetch(`/api/recipe-details/${recipe.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Update the selectedRecipe with the full details
+        dispatch(setSelectedRecipe({ ...recipe, details: data }));
+        setShowRecipeDetails(true); // Show the recipe details
+      }
+    } catch (error) {
+      console.error('Error fetching recipe details:', error);
+    }
+  };
 
   return (
     <div>
       <h2>Recipes</h2>
       <ul>
         {recipes.map((recipe) => (
-          <li key={recipe.id}>
+          <li key={recipe.id} onClick={() => handleRecipeClick(recipe)}>
             <h3>{recipe.title}</h3>
             <img src={recipe.image} alt={recipe.title} />
             <p>Likes: {recipe.likes}</p>
-            <h4>Missed Ingredients:</h4>
-            <ul>
-              {recipe.missedIngredients.map((ingredient) => (
-                <li key={ingredient.id}>{ingredient.name}</li>
-              ))}
-            </ul>
-            {/* Similar lists for unusedIngredients and usedIngredients */}
           </li>
         ))}
       </ul>
+      {showRecipeDetails && selectedRecipe && <RecipeDetail recipe={selectedRecipe} />}
     </div>
   );
 }
+
+// function RecipeList() {
+//   const recipes = useSelector((state) => state.recipes);
+
+//   return (
+//     <div>
+//       <h2>Recipes</h2>
+//       <ul>
+//         {recipes.map((recipe) => (
+//           <li key={recipe.id}>
+//             <h3>{recipe.title}</h3>
+//             <img src={recipe.image} alt={recipe.title} />
+//             <p>Likes: {recipe.likes}</p>
+//             <h4>Missing Ingredients:</h4>
+//             <ul>
+//               {recipe.missedIngredients.length > 0 ? (
+//                 recipe.missedIngredients.map((ingredient) => (
+//                   <li key={ingredient.id}>{ingredient.name}</li>
+//                 ))
+//               ) : (
+//                 <li>None</li>
+//               )}
+//             </ul>
+//             {/* Similar lists for unusedIngredients and usedIngredients */}
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
 
 export default RecipeList;

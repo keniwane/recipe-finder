@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient } from '../reducers/ingredientsSlice';
+import { showIngredient, clearIngredients } from '../reducers/ingredientsSlice';
+import { addToList } from '../reducers/ingredientListSlice';
+// import { addToList, removeFromList, clearList} from '../reducers/ingredientListSlice';
 import axios from 'axios';
 
 function IngredientSearch() {
@@ -13,11 +15,15 @@ function IngredientSearch() {
         `http://localhost:8000/api/search-ingredients?ingredient=${ingredient}`
       );
       console.log('API Response:', response.data);
-
-      dispatch(addIngredient(response.data));
+      dispatch(clearIngredients());
+      dispatch(showIngredient(response.data));
     } catch (error) {
       console.error('Error fetching ingredient:', error);
     }
+  };
+
+  const handleAddToList = (ingredientName) => {
+    dispatch(addToList(ingredientName));
   };
 
   return (
@@ -32,8 +38,10 @@ function IngredientSearch() {
 
       {/* Display the results */}
       <ul>
-        {ingredients[0]?.results.map((ing) => (
-          <li key={ing.id}>{ing.name}</li>
+        {ingredients[0]?.results.map((ingredient) => (
+          <li key={ingredient.id} onClick={() => handleAddToList(ingredient)}>
+            {ingredient.name}
+          </li>
         ))}
       </ul>
     </div>

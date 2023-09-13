@@ -4,12 +4,12 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState: [],
   reducers: {
-    addIngredient: (state, action) => {
+    showIngredient: (state, action) => {
       state.push(action.payload);
     },
     clearIngredients: () => [],
   },
 });
 
-export const { addIngredient, clearIngredients } = ingredientsSlice.actions;
+export const { showIngredient, clearIngredients } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

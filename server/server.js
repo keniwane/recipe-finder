@@ -4,11 +4,10 @@ const app = express();
 const axios = require('axios');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+require('dotenv').config();
 const PORT = 8000;
 
-const MONGO_URI =
-  'mongodb+srv://keniwane:2g1o3BtjXfCgt2Q6@cluster0.zdnol4p.mongodb.net/?retryWrites=true&w=majority';
+const MONGO_URI = process.env.MY_URI;
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 
@@ -25,24 +24,8 @@ mongoose
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    // app.get('/test-spoonacular', async (req, res) => {
-    //   try {
-    //     const apiKey = 'e559bd8ab2da4600bc8f3f11a212805d'; // Replace with your API key
-    //     const query = 'chicken'; // Example query
-    //     const apiUrl = `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${apiKey}`;
-
-    //     const response = await axios.get(apiUrl);
-    //     res.json(response.data);
-    //   } catch (error) {
-    //     res.status(500).json({
-    //       message: 'Error fetching data from Spoonacular',
-    //       error: error.message,
-    //     });
-    //   }
-    // });
-
     app.get('/', (req, res) => {
-      res.send('Hello, Recipe Finder!');
+      res.send('Server is active!');
     });
 
     const apiRouter = require('./routes/api');
