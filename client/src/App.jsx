@@ -7,7 +7,7 @@ import '../styles.css';
 function App() {
   return (
     <div className='app'>
-      <h1 className='header'>Recipe Finder</h1>
+      <h1 className='main-header'>Hungry?</h1>
       <IngredientSearch />
       <IngredientList />
       <RecipeList />
