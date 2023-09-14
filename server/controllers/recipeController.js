@@ -1,7 +1,7 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const { Recipe, MissedIngredient, UsedIngredient } = require('../models/recipeModels');
+const { Recipe, MissedIngredient, RecipeDetail } = require('../models/recipeModels');
 
 exports.searchIngredients = async (req, res, next) => {
   try {
@@ -66,10 +66,11 @@ exports.findRecipesByIngredients = async (req, res, next) => {
 exports.getRecipeDetails = async (req, res, next) => {
   try {
     const recipeId = req.params.id;
+    console.log(recipeId);
 
     // Check if recipe details are already in the database
-    // const existingRecipe = await Recipe.findOne({ id: recipeId });
-    // console.log(existingRecipe);
+    // const existingRecipe = await RecipeDetail.findOne({ id: recipeId });
+    // console.log('existing recipe : ', existingRecipe);
     // if (existingRecipe) {
     //   return res.json(existingRecipe);
     // }
@@ -78,11 +79,12 @@ exports.getRecipeDetails = async (req, res, next) => {
     const response = await axios.get(
       `https://api.spoonacular.com/recipes/${recipeId}/analyzedInstructions?stepBreakdown=true&apiKey=${process.env.API_KEY}`
     );
+    console.log('Retrieved recipe details: ', response.data);
 
     // Store the result in the database
-    // const newRecipe = new Recipe(response.data);
-    // await newRecipe.save();
-    // console.log(newRecipe);
+    // const newRecipeDetail = new RecipeDetail(response.data);
+    // await RecipeDetail.save();
+    // console.log('new details: ', newRecipeDetail);
 
     res.json(response.data);
   } catch (error) {
