@@ -7,12 +7,9 @@ function RecipeDetails({ recipe }) {
     <div className='recipe-detail'>
       <h4>Steps:</h4>
       <ol>
-        {recipe.steps &&
-          recipe.steps.map((step, index) => (
-            <li key={index}>
-              <strong>Step {step.number}:</strong> {step.step}
-            </li>
-          ))}
+        {recipe.steps.map((step, index) => (
+          <li key={index}>{step.step}</li>
+        ))}
       </ol>
     </div>
   );
