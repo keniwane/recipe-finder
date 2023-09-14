@@ -1,16 +1,19 @@
 import React from 'react';
 
 function RecipeDetails({ recipe }) {
+  console.log('Rendering RecipeDetail with recipe:', recipe);
+
   return (
-    <div className='recipe-detail-box'>
-      <h3>{recipe.title}</h3>
-      <img src={recipe.image} alt={recipe.title} />
-      <h4>Missing Ingredients:</h4>
-      <ul>
-        {recipe.missedIngredients.map((ingredient) => (
-          <li key={ingredient.id}>{ingredient.name}</li>
-        ))}
-      </ul>
+    <div className='recipe-detail'>
+      <h4>Steps:</h4>
+      <ol>
+        {recipe.steps &&
+          recipe.steps.map((step, index) => (
+            <li key={index}>
+              <strong>Step {step.number}:</strong> {step.step}
+            </li>
+          ))}
+      </ol>
     </div>
   );
 }
