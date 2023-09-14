@@ -27,19 +27,26 @@ function IngredientSearch() {
   };
 
   return (
-    <div>
+    <div className='search-container'>
       <input
         type='text'
+        className='search-bar'
         value={ingredient}
         onChange={(e) => setIngredient(e.target.value)}
         placeholder='Enter ingredient...'
       />
-      <button onClick={handleSearch}>Search</button>
+      <button onClick={handleSearch} className='search-button'>
+        Search
+      </button>
 
       {/* Display the results */}
       <ul>
         {ingredients[0]?.results.map((ingredient) => (
-          <li key={ingredient.id} onClick={() => handleAddToList(ingredient)}>
+          <li
+            key={ingredient.id}
+            className='ingredient-tag'
+            onClick={() => handleAddToList(ingredient)}
+          >
             {ingredient.name}
           </li>
         ))}
